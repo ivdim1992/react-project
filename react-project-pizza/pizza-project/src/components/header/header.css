@@ -1,0 +1,21 @@
+.header-nav {
+    background: #CCE7DA;
+}
+
+.header-nav__items {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.header-nav__items  a {
+    display: block;
+    color: #000;
+    padding: 1rem;
+}
+
+.header-nav__items  a:hover {
+background: #3F755A;
+}
+
