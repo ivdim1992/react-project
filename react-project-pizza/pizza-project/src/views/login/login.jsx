@@ -2,6 +2,8 @@ import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import AuthenticationService from '../../services/authentication-service';
 
+
+
 class Login extends React.Component {
 
     static service = new AuthenticationService();
@@ -41,7 +43,6 @@ class Login extends React.Component {
     }
 
     render() {
-
         if (this.state.isLoggedIn) {
             return (
                 <Redirect to="/" />
@@ -91,7 +92,7 @@ class Login extends React.Component {
                     </div>
                     <div className="login-form__create-account">
                         <p className="login-form__create-account__label">Don`t have an account yet?</p>
-                        <a href="#" className="login-form__create-account__link">Create an account</a>
+                        <Link to="/register" className="login-form__create-account__link">Create an account</Link>
                     </div>
                 </form>
             </div>

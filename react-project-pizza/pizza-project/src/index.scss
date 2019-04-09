@@ -1,0 +1,12 @@
+@import './sass/reset';
+@import './sass/colors';
+@import './sass/variables';
+@import './sass/buttons';
+@import './sass/app';
+
+@import './components/header/header';
+//Home
+@import './views/home/welcome-message';
+@import './views/login/login';
+@import './views/register/register';
+@import './components/footer/footer';
