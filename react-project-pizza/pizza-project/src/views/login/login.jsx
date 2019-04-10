@@ -1,73 +1,41 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import AuthenticationService from '../../services/authentication-service';
 
 
 
 class Login extends React.Component {
 
-    static service = new AuthenticationService();
+    constructor(props){
+        super(props)
 
-    state = {
-        email: '',
-        password: '',
-        isLoggedIn: false,
-        error: '',
+        this.state ={
+            username: '',
+            password: '',
+        }
     }
 
-    handleChange = ({ target }) => {
-        this.setState({
-            [target.name]: target.value
-        })
+    handleChange = (event) =>{
+        this.setState({[event.target.name]: event.target.value})
     }
 
     handleSubmit = (event) => {
         event.preventDefault();
-
-        this.setState({
-            error: ''
-        }, async () => {
-            try {
-                const credentials = await this.service.login();
-                console.log(credentials);
-
-                this.setState({
-                    isLoggedIn: true,
-                })
-            } catch (error) {
-                this.setState({
-                    error: error.message
-                })
-            }
-        })
+        this.props.loginUser(this.state)
     }
 
     render() {
-        if (this.state.isLoggedIn) {
-            return (
-                <Redirect to="/" />
-            )
-        }
-
-        if (this.state.error) {
-
-        }
+       
         return (
             <div className="form-wrapper">
-                {
-                    this.state.error.length
-                        ? <div>Something went wrong: {this.state.error}</div>
-                        : null
-                }
-                <form className="login-form" action="#">
+                <form className="login-form" action="#" onSubmit={this.handleSubmit}>
                     <p className="login-form__header">Log in to your account</p>
-                    <label className="label" htmlFor="email">Email</label>
+                    <label className="label" htmlFor="email">username</label>
                     <input
                         className="login-form__input"
-                        id="email"
-                        name="email"
+                        id="username"
+                        name="username"
                         type="text"
-                        value={this.state.email}
+                        value={this.state.username}
                         onChange={this.handleChange}
                     />
                     <div className="forgot-link-wrapper">

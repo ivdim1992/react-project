@@ -3,27 +3,43 @@ import {Link} from 'react-router-dom';
 
 class Register extends React.Component {
 
-    state = {
-        email: '',
-        password: '',
-       
+    constructor(props){
+        super(props)
+
+        this.state = {
+            username: '',
+            email: '',
+            password: '',
+
+        }
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleChange = ({ target }) => {
-        this.setState({
-            [target.name]: target.value
-        })
-    }
+    handleChange(event){
 
-    handleSubmit = (event) => {
-       
+        this.setState({[event.target.name]:event.target.value})
+    }
+    handleSubmit(event){
+        event.preventDefault()
+        alert('A name was submitted: ' + this.state[this.email]);
+        this.props.registerUser(this.state)
     }
 
     render() {
         return(
             <div className="register-wrapper">
-            <form className="register-form" action="#">
+            <form className="register-form" action="#" onSubmit={this.handleSubmit}>
                     <p className="register-form__header">Register</p>
+                    <label className="label" htmlFor="email">Username</label>
+                    <input
+                        className="register-form__input"
+                        id="username"
+                        name="username"
+                        type="text"
+                        value={this.state.username}
+                        onChange={this.handleChange}
+                    />
                     <label className="label" htmlFor="email">Email</label>
                     <input
                         className="register-form__input"

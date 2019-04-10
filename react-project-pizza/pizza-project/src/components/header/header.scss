@@ -1,11 +1,15 @@
 .header-nav {
     background: $base-color;
 
-    &__items {
+    &__items span {
         list-style: none;
         display: flex;
-        justify-content: space-between;
+        justify-content: space-around;
+        align-items: center;
         flex-wrap: wrap;
+    }
+    .selected {
+        background:darken($base-color, 30);
     }
     
     &__items  a {
@@ -17,9 +21,8 @@
     &__items  a:hover {
     background:  darken($base-color,20);
     }
-    img {
-        width:30%;
-    }
+   
+  
 }
 
 
