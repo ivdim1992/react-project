@@ -3,18 +3,25 @@ import { NavLink } from 'react-router-dom'
 
 
 const Header = (props) => {
-    
+
     return (
         <header>
             <nav className="header-nav">
                 <ul className="header-nav__items">
                     {
-                        props.username
+                        props.username 
                             ? (<span>
-                                <span>Welcome {props.username}</span>
-                                <li><NavLink to="/orders" activeClassName="selected">My orders</NavLink></li>
-                                <li><NavLink to="/logout">Logout</NavLink></li>
+                                <li><NavLink to="/" exact activeClassName="selected">Home</NavLink></li>
+                                <span>Welcome,<b>{props.username}</b></span>
+                                {
+                                    props.isAdmin
+                                        ? <li><NavLink to="/create" activeClassName="selected">Create Pizza</NavLink></li>
+                                        : <li><NavLink to="/orders" activeClassName="selected">My orders</NavLink></li>
+                                }
+                                
                                 <li><NavLink to="/about" activeClassName="selected">About</NavLink></li>
+                                <li><NavLink to="/logout" onClick={props.logout}>Logout</NavLink></li>
+
                             </span>
                             )
                             : (

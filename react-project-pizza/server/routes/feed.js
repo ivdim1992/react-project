@@ -4,8 +4,7 @@ const isAuth = require('../middleware/is-auth');
 
 router.get('/pizzas', feedController.getPizzas);
 router.post('/pizza/create', feedController.createPizza);
-router.delete('/pizzas/:id', feedController.deletePizza);
-router.put('/pizzas/:id', feedController.updatePizza);
-
+router.put('/pizza/:id',feedController.updatePizza);
+router.delete('/pizza/:id',feedController.deletePizza);
 
 module.exports = router;

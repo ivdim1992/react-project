@@ -1,12 +1,15 @@
 .header-nav {
     background: $base-color;
-
+    &__items {
+        padding: 0;
+    }
     &__items span {
         list-style: none;
         display: flex;
         justify-content: space-around;
         align-items: center;
         flex-wrap: wrap;
+
     }
     .selected {
         background:darken($base-color, 30);

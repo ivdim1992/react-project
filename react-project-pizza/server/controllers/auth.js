@@ -70,7 +70,8 @@ module.exports = {
              message: 'User successfully logged in!', 
              token, 
              userId: user._id.toString(),
-             username: user.username
+             username: user.username,
+             isAdmin: user.roles.indexOf('Admin') != -1
            });
       })
       .catch(error => {

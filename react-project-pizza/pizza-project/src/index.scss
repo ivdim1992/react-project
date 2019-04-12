@@ -1,4 +1,6 @@
 @import './sass/reset';
+@import './sass/mixins';
+@import './sass/typography';
 @import './sass/colors';
 @import './sass/variables';
 @import './sass/buttons';
@@ -7,6 +9,9 @@
 @import './components/header/header';
 //Home
 @import './views/home/welcome-message';
+@import './views/home/list-pizzas/list-pizza';
+@import './views/home/pizza-card/pizza-card';
+
 @import './views/login/login';
 @import './views/register/register';
 @import './components/footer/footer';

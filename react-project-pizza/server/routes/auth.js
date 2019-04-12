@@ -5,7 +5,8 @@ const User = require('../models/User');
 
 router.post('/signup', 
   [
-      body('email')
+    // TODO: Add normalize email and check
+    body('email')
       .isEmail()
       .withMessage('Please enter a valid email.')
       .custom((value, { req }) => {

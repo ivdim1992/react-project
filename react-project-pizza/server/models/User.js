@@ -18,7 +18,8 @@ const userSchema = new Schema({
   salt: {
     type: Schema.Types.String,
     required: true
-  }
+  },
+  roles: [{type: Schema.Types.String, required: true}]
 });
 
 userSchema.method({
@@ -29,4 +30,24 @@ userSchema.method({
   }
 });
 
-module.exports = mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema);
+
+User.seedAdminUser = async () => {
+  try {
+    let users = await User.find();
+    if (users.length > 0) return;
+    const salt = encryption.generateSalt();
+    const hashedPassword = encryption.generateHashedPassword(salt, 'Admin');
+    return User.create({
+      username: 'Admin',
+      email: 'Admin@gmail.com',
+      salt,
+      hashedPassword,
+      roles: ['Admin']
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+module.exports = User;

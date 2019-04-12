@@ -1,13 +1,11 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-
-
+import { toast } from 'react-toastify';
 
 class Login extends React.Component {
 
     constructor(props){
         super(props)
-
         this.state ={
             username: '',
             password: '',
@@ -17,14 +15,33 @@ class Login extends React.Component {
     handleChange = (event) =>{
         this.setState({[event.target.name]: event.target.value})
     }
+    handleValidation(){
+        let username = this.state.username;
+        let password = this.state.password;
+        let formIsValid = true;
+
+        //Name
+        if(!username){
+           formIsValid = false;
+           toast.error("Username can not be empty");
+        }
+
+        if(!password){
+            formIsValid = false;
+            toast.error("Password can not be empty");
+         }
+       return formIsValid;
+   }
+
 
     handleSubmit = (event) => {
         event.preventDefault();
-        this.props.loginUser(this.state)
+        if(this.handleValidation()){
+            this.props.loginUser(this.state)
+        }
     }
 
     render() {
-       
         return (
             <div className="form-wrapper">
                 <form className="login-form" action="#" onSubmit={this.handleSubmit}>

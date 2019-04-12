@@ -6,7 +6,7 @@ module.exports = {
             .then((pizzas) => {
                 res
                     .status(200)
-                    .json({ message: 'Fetched records successfully.', pizzas });
+                    .json({ message: 'Fetched pizzas successfully.', pizzas });
 
             })
             .catch((error) => {
@@ -23,9 +23,9 @@ module.exports = {
             .then((pizza) => {
                 res.status(200)
                     .json({
-                        message: 'Record created successfully!',
+                        message: 'Pizza created successfully!',
                         pizza
-                    })
+                    });
             })
             .catch((error) => {
             if (!error.statusCode) {
@@ -41,7 +41,7 @@ module.exports = {
         //console.log('controller'+ id);
         Pizza.findById(id)
             .then((pizza) => {
-                record
+                pizza
                     .remove()
                     .then(() => {
                         return res.status(200).json({
@@ -54,8 +54,8 @@ module.exports = {
                 return res.status(200).json({
                     success: false,
                     message: 'Entry does not exist!'
-                })
-            })
+                });
+            });
 
     },
 
@@ -87,9 +87,6 @@ module.exports = {
                     success: false,
                     message: 'Entry does not exist!'
                 });
-            })
-
+            });
     }
-
-
-}
+};
