@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 
-class CreatePizza extends Component {
+class UpdatePizza extends Component {
     constructor(props) {
         super(props)
 
@@ -11,6 +11,21 @@ class CreatePizza extends Component {
             imageUrl: '',
             price: '',
         }
+
+        // this.initialState = this.state
+    }
+
+    componentWillMount() {
+        this.props.pizzas.map(pizza => {
+            if(pizza._id === this.props.match.params.id) {
+                this.setState({
+                    title: pizza.title,
+                    ingredients: pizza.ingredients,
+                    imageUrl:pizza.imageUrl,
+                    price: pizza.price,
+                })
+            }     
+        })
     }
 
     handleChange = (event) => {
@@ -18,60 +33,62 @@ class CreatePizza extends Component {
     }
     handleSubmit = (event) => {
         event.preventDefault();
-        this.props.createPizza(this.state);
+        this.props.updatePizza(this.state,this.props.match.params.id);
         this.props.history.push('/');
     }
 
     render() {
         return (
-            <div className="createPizza">
-                <h1>Create Pizza</h1>
+            <div className="updatePizza">
+                <h1>Update Pizza</h1>
                 <form onSubmit={this.handleSubmit}>
-                    <label className="createPizza__label">Title</label>
+                    <label className="updatePizza__label">Title</label>
                     <br />
                     <input 
-                        className="createPizza__input"
+                        className="updatePizza__input"
                         type="text" 
                         onChange={this.handleChange} 
                         name="title"
                         value={this.state.title}
-                        />
+                    />
                     <br />
-                    <label className="createPizza__label">Ingredients</label>
+                    <label className="updatePizza__label">Ingredients</label>
                     <br />
                     <input 
-                        className="createPizza__input"
+                        className="updatePizza__input"
                         type="text" 
                         onChange={this.handleChange} 
                         name="ingredients"
-                        value={this.state.ingredients}
+                        value={this.state.ingredients
+                    }
                     />
                     <br />
-                    <label className="createPizza__label">ImageUrl</label>
+                    <label className="updatePizza__label">ImageUrl</label>
                     <br />
                     <input 
-                        className="createPizza__input"
+                        className="updatePizza__input"
                         type="text" 
                         onChange={this.handleChange} 
                         name="imageUrl" 
-                        value={this.state.imageUrl}
+                        value={this.state.imageUrl
+                    }
                   />
                     <br />
-                    <label  className="createPizza__label">Price</label>
+                    <label  className="updatePizza__label">Price</label>
                     <br />
                     <input 
-                        className="createPizza__input"
+                        className="updatePizza__input"
                         type="text" 
                         onChange={this.handleChange}
                         name="price"
                         value={this.state.price}
                     />
                     <br />
-                    <button className="createPizza__btn" type="submit" value="Create">Create</button>
+                    <button className="updatePizza__btn" type="submit">Update</button>
                 </form>
             </div>
         )
     }
 
 }
-export default CreatePizza;
+export default UpdatePizza;

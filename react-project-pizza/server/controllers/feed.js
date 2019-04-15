@@ -16,6 +16,7 @@ module.exports = {
                 next(error);
             });
     },
+
     createPizza: (req, res, next) => {
         const pizzaObj = req.body;
         console.log(req.body);
@@ -38,7 +39,7 @@ module.exports = {
 
     deletePizza: (req, res, next) => {
         const id = req.params.id;
-        //console.log('controller'+ id);
+        console.log('controller'+ id);
         Pizza.findById(id)
             .then((pizza) => {
                 pizza
@@ -47,8 +48,8 @@ module.exports = {
                         return res.status(200).json({
                             success: true,
                             message: 'Pizza deleted successfully!'
-                        })
-                    })
+                        });
+                    });
             })
             .catch(() => {
                 return res.status(200).json({
@@ -56,7 +57,6 @@ module.exports = {
                     message: 'Entry does not exist!'
                 });
             });
-
     },
 
     updatePizza: (req, res, next) => {

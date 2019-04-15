@@ -8,10 +8,18 @@ function ListPizzas(props) {
             <h2>Pizza's Menu</h2>
             <ul className="pizza-container__items">
                 {
-                    props.pizzas.map(pizza => (
-                        <li className="item"><PizzaCard isAdmin={props.isAdmin} key={pizza._id} {...pizza} /></li>
+                    props.pizzas.length 
+                    ? props.pizzas.map(pizza => (
+                        <li className="item" key={pizza._id}>
+                            <PizzaCard 
+                                updatePizza={props.updatePizza} 
+                                deletePizza={props.deletePizza} 
+                                isAdmin={props.isAdmin}  
+                                {...pizza} />
+                        </li>
                     ))
-                }
+                    : <div>No Pizzas in the store</div>
+                }  
             </ul>
         </div>
     )
