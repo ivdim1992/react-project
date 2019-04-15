@@ -6,11 +6,13 @@
 @import './sass/buttons';
 @import './sass/app';
 
+
 @import './components/header/header';
 //Home
 @import './views/home/welcome-message';
 @import './views/home/list-pizzas/list-pizza';
 @import './views/home/pizza-card/pizza-card';
+@import './views//createPizzaForm/createPizzaForm.scss';
 
 @import './views/login/login';
 @import './views/register/register';

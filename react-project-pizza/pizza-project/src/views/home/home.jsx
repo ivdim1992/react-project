@@ -9,7 +9,7 @@ function Home(props) {
         <div className="welcome-wrapper">
             <WelcomeMessage message="Welcome to our Delicious pizzas">
             </WelcomeMessage>
-            <ListPizzas  pizzas={props.pizzas}/>
+            <ListPizzas isAdmin={props.isAdmin}  pizzas={props.pizzas}/>
         </div>
     )
 }

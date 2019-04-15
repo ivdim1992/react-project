@@ -1,15 +1,21 @@
 .pizza-card {
-  padding: 0.7rem;
-  text-align: center;
-  display: inline-block;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.15);
-  margin: 20px;
-  position: relative;
-  margin-bottom: 50px;
-  transition: all 0.2s ease-in-out;
+      text-align: center;
+      display: inline-block;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.15);
+      margin-bottom: 50px;
+      transition: all 0.2s ease-in-out;
+      
 
      h4{
+        margin-top: 1rem;
         color:#483D52;
+    }
+
+    &__ingredients {
+        border-top: solid 2px #D2D8DD;
+        padding: 2rem;
+        border-bottom: solid 2px #D2D8DD;
+        margin: 1rem 0rem;
     }
 
 
@@ -27,5 +33,10 @@
   &:hover {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
     opacity: 1;
+  }
+
+  .order-btn {
+    margin: 1rem;
+    padding: 0.6rem 5rem;
   }
 }

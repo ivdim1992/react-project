@@ -10,7 +10,6 @@ class CreatePizza extends Component {
             ingredients: '',
             imageUrl: '',
             price: '',
-            id: ''
         }
     }
 
@@ -20,7 +19,7 @@ class CreatePizza extends Component {
     handleSubmit = (event) => {
         event.preventDefault();
         this.props.createPizza(this.state);
-
+        this.props.history.push('/');
     }
 
     render() {
@@ -28,23 +27,50 @@ class CreatePizza extends Component {
             <div className="createPizza">
                 <h1>Create Pizza</h1>
                 <form onSubmit={this.handleSubmit}>
-                    <label>Title</label>
+                    <label className="createPizza__label">Title</label>
                     <br />
-                    <input type="text" onChange={this.handleChange} name="title" id="title" />
+                    <input 
+                    className="createPizza__input"
+                    type="text" 
+                    onChange={this.handleChange} 
+                    name="title"
+                    value={this.state.title}
+                    />
+                    
                     <br />
-                    <label>Ingredients</label>
+                    <label className="createPizza__label">Ingredients</label>
                     <br />
-                    <textarea type="text" onChange={this.handleChange} name="ingredients" id="description" />
+                    <input 
+                      className="createPizza__input"
+                    type="text" 
+                    onChange={this.handleChange} 
+                    name="ingredients"
+                    value={this.state.ingredients
+                    }
+                    />
                     <br />
-                    <label>ImageUrl</label>
+                    <label className="createPizza__label">ImageUrl</label>
                     <br />
-                    <input type="text" onChange={this.handleChange} name="imageUrl" id="imageUrl" />
+                    <input 
+                    className="createPizza__input"
+                    type="text" 
+                    onChange={this.handleChange} 
+                    name="imageUrl" 
+                    value={this.state.imageUrl
+                    }
+                  />
                     <br />
-                    <label>Price</label>
+                    <label  className="createPizza__label">Price</label>
                     <br />
-                    <input type="text" onChange={this.handleChange} name="price" id="priceId" />
+                    <input 
+                    className="createPizza__input"
+                    type="text" 
+                    onChange={this.handleChange}
+                    name="price"
+                    value={this.state.price}
+                    />
                     <br />
-                    <input type="submit" value="Create" />
+                    <button className="createPizza__btn" type="submit" value="Create">Create</button>
                 </form>
             </div>
         )

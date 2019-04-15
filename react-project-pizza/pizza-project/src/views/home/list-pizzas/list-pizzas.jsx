@@ -9,7 +9,7 @@ function ListPizzas(props) {
             <ul className="pizza-container__items">
                 {
                     props.pizzas.map(pizza => (
-                        <li className="item"><PizzaCard key={pizza._id} {...pizza} /></li>
+                        <li className="item"><PizzaCard isAdmin={props.isAdmin} key={pizza._id} {...pizza} /></li>
                     ))
                 }
             </ul>

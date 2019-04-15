@@ -132,7 +132,7 @@ class App extends Component {
                         toast.error(`${err.msg}`)
                     });
                 } else {
-
+                    toast('Succesfully Created')
                 }
                 console.log(data)
             })
@@ -143,7 +143,7 @@ class App extends Component {
                 <ToastContainer />
                 <Header username={this.state.user} isAdmin={this.state.isAdmin} logout={this.logout.bind(this)} />
                 <Switch>
-                    <Route exact path="/" component={(props) => <Home {...props} pizzas={this.state.pizzas} />} />
+                    <Route exact path="/" component={(props) => <Home {...props} isAdmin={this.state.isAdmin} pizzas={this.state.pizzas} />} />
                     <Route path="/about" component={About} />
                     <Route
                         path="/register"
