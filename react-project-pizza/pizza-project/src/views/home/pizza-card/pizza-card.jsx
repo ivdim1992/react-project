@@ -21,7 +21,7 @@ function PizzaCard ({ title, imageUrl, price,_id,ingredients,isAdmin,deletePizza
                    ingredients
                 }
             </div>
-            <div className="pizza-card__price">{price}</div>
+            <div className="pizza-card__price">{price} <span>BGN</span></div>
             {
                 isAdmin 
                 ? <span>
