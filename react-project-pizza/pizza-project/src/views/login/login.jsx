@@ -1,52 +1,73 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import AuthenticationService from '../../services/authentication-service';
 
 class Login extends React.Component {
 
-    constructor(props){
+    static service = new AuthenticationService();
+    constructor(props) {
         super(props)
-        this.state ={
+        this.state = {
             username: '',
             password: '',
+            errMessage: ''
         }
     }
 
-    handleChange = (event) =>{
-        this.setState({[event.target.name]: event.target.value})
+    handleChange = ({ target }) => {
+        this.setState({ [target.name]: target.value })
     }
-    handleValidation(){
+    handleValidation() {
         let username = this.state.username;
         let password = this.state.password;
         let formIsValid = true;
 
-        //Name
-        if(!username){
-           formIsValid = false;
-           toast.error("Username can not be empty");
+        if (!username) {
+            formIsValid = false;
+            toast.error("Username can not be empty");
         }
 
-        if(!password){
+        if (!password) {
             formIsValid = false;
             toast.error("Password can not be empty");
-         }
-       return formIsValid;
-   }
+        }
+        return formIsValid;
+    }
 
-
-    handleSubmit = (event) => {
+    handleSubmit = async (event) => {
         event.preventDefault();
-        if(this.handleValidation()){
-            this.props.loginUser(this.state)
+        const { username, password } = this.state;
+        const credentials = { username, password };
+
+        if (this.handleValidation()) {
+            try {
+                const result = await Login.service.login(credentials);
+             
+                if (Object.keys(result).length > 1) {
+                    this.props.loggedUser(result);
+                    this.props.history.push('/');
+                } else {
+                    this.setState({
+                        errMessage: result.message
+                    })
+
+                    toast(`${this.state.errMessage}`)
+                }
+            } catch (err) {
+                this.setState({
+                    errMessage: err.message
+                })
+            }
         }
     }
 
     render() {
         return (
             <div className="form-wrapper">
-                <form className="login-form" action="#" onSubmit={this.handleSubmit}>
+                <form className="login-form" onSubmit={this.handleSubmit}>
                     <p className="login-form__header">Log in to your account</p>
-                    <label className="label" htmlFor="email">username</label>
+                    <label className="label" htmlFor="username">Username</label>
                     <input
                         className="login-form__input"
                         id="username"
@@ -84,4 +105,6 @@ class Login extends React.Component {
         )
     }
 }
+
+
 export default Login;

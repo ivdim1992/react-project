@@ -1,9 +1,12 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import AuthenticationService from '../../services/authentication-service';
+import { toast } from 'react-toastify';
 
 class Register extends React.Component {
+    static service = new AuthenticationService();
 
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state = {
             username: '',
@@ -12,19 +15,29 @@ class Register extends React.Component {
         }
     }
 
-    handleChange = (event) =>{
+    handleChange = ({ target }) => {
 
-        this.setState({[event.target.name]:event.target.value})
+        this.setState({ [target.name]: target.value })
     }
-    handleSubmit =(event) => {
+    handleSubmit = async (event) => {
         event.preventDefault()
-        this.props.registerUser(this.state)
+        const { username, email, password } = this.state;
+        const credentials = { username, password, email };
+
+        const result = await Register.service.register(credentials);
+
+        if (result.errors) {
+            result.errors.map(err => toast(`${err.msg}`))
+        } else {
+            this.props.loggedUser(this.state)
+            this.props.history.push('/');
+        }
     }
 
     render() {
-        return(
+        return (
             <div className="register-wrapper">
-            <form className="register-form" action="#" onSubmit={this.handleSubmit}>
+                <form className="register-form" action="#" onSubmit={this.handleSubmit}>
                     <p className="register-form__header">Register</p>
                     <label className="label" htmlFor="email">Username</label>
                     <input

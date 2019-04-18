@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-
+import PizzaService from '../../services/pizza-service';
+import { toast } from 'react-toastify';
 
 class UpdatePizza extends Component {
+    static service = new PizzaService();
+
     constructor(props) {
         super(props)
 
@@ -11,30 +14,37 @@ class UpdatePizza extends Component {
             imageUrl: '',
             price: '',
         }
-
-        // this.initialState = this.state
     }
 
     componentWillMount() {
-        this.props.pizzas.map(pizza => {
-            if(pizza._id === this.props.match.params.id) {
-                this.setState({
-                    title: pizza.title,
-                    ingredients: pizza.ingredients,
-                    imageUrl:pizza.imageUrl,
-                    price: pizza.price,
-                })
-            }     
+        const selectedPizza = this.props.pizzas
+            .filter(pizza => pizza._id === this.props.match.params.id)
+
+        selectedPizza.forEach(pizza => {
+            this.setState({
+                title: pizza.title,
+                ingredients: pizza.ingredients,
+                imageUrl: pizza.imageUrl,
+                price: pizza.price,
+            })
         })
+
     }
 
-    handleChange = (event) => {
-        this.setState({ [event.target.name]: event.target.value })
+    handleChange = ({ target }) => {
+        this.setState({ [target.name]: target.value })
     }
-    handleSubmit = (event) => {
+    handleSubmit = async (event) => {
         event.preventDefault();
-        this.props.updatePizza(this.state,this.props.match.params.id);
+        const { title, ingredients, imageUrl, price } = this.state;
+        const pizza = { title, ingredients, imageUrl, price };
+        
+        const result = await UpdatePizza.service.updatePizza(pizza,this.props.match.params.id)
+    
+        toast(`${result.message}`)
+        this.props.updatedPizza(pizza);
         this.props.history.push('/');
+
     }
 
     render() {
@@ -44,41 +54,41 @@ class UpdatePizza extends Component {
                 <form onSubmit={this.handleSubmit}>
                     <label className="updatePizza__label">Title</label>
                     <br />
-                    <input 
+                    <input
                         className="updatePizza__input"
-                        type="text" 
-                        onChange={this.handleChange} 
+                        type="text"
+                        onChange={this.handleChange}
                         name="title"
                         value={this.state.title}
                     />
                     <br />
                     <label className="updatePizza__label">Ingredients</label>
                     <br />
-                    <input 
+                    <input
                         className="updatePizza__input"
-                        type="text" 
-                        onChange={this.handleChange} 
+                        type="text"
+                        onChange={this.handleChange}
                         name="ingredients"
                         value={this.state.ingredients
-                    }
+                        }
                     />
                     <br />
                     <label className="updatePizza__label">ImageUrl</label>
                     <br />
-                    <input 
+                    <input
                         className="updatePizza__input"
-                        type="text" 
-                        onChange={this.handleChange} 
-                        name="imageUrl" 
+                        type="text"
+                        onChange={this.handleChange}
+                        name="imageUrl"
                         value={this.state.imageUrl
-                    }
-                  />
+                        }
+                    />
                     <br />
-                    <label  className="updatePizza__label">Price</label>
+                    <label className="updatePizza__label">Price</label>
                     <br />
-                    <input 
+                    <input
                         className="updatePizza__input"
-                        type="text" 
+                        type="text"
                         onChange={this.handleChange}
                         name="price"
                         value={this.state.price}

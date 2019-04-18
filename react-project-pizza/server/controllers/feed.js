@@ -29,17 +29,17 @@ module.exports = {
                     });
             })
             .catch((error) => {
-            if (!error.statusCode) {
-                error.statusCode = 500;
-            }
+                if (!error.statusCode) {
+                    error.statusCode = 500;
+                }
 
-            next(error);
-        });
+                next(error);
+            });
     },
 
     deletePizza: (req, res, next) => {
         const id = req.params.id;
-        console.log('controller'+ id);
+        console.log('controller' + id);
         Pizza.findById(id)
             .then((pizza) => {
                 pizza
@@ -62,10 +62,11 @@ module.exports = {
     updatePizza: (req, res, next) => {
         const id = req.params.id;
         const data = req.body;
+      
         Pizza.findById(req.params.id)
             .then((pizza) => {
 
-                Pizza.updateOne({_id: id}, { $set: data})
+                Pizza.updateOne({ _id: id }, { $set: data })
                     .then((pizza) => {
                         res.status(200)
                             .json({
