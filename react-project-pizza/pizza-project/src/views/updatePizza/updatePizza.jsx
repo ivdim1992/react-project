@@ -37,12 +37,12 @@ class UpdatePizza extends Component {
     handleSubmit = async (event) => {
         event.preventDefault();
         const { title, ingredients, imageUrl, price } = this.state;
-        const pizza = { title, ingredients, imageUrl, price };
+        const pizza = { title, ingredients, imageUrl, price, _id: this.props.match.params.id};
         
         const result = await UpdatePizza.service.updatePizza(pizza,this.props.match.params.id)
     
         toast(`${result.message}`)
-        this.props.updatedPizza(pizza);
+        this.props.updatedPizza(result.pizza);
         this.props.history.push('/');
 
     }

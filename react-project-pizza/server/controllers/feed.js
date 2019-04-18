@@ -67,11 +67,11 @@ module.exports = {
             .then((pizza) => {
 
                 Pizza.updateOne({ _id: id }, { $set: data })
-                    .then((pizza) => {
+                    .then(() => {
                         res.status(200)
                             .json({
                                 message: 'Pizza updated successfully!',
-                                pizza
+                                pizza: {...pizza.doc, ...data}
                             });
                     })
                     .catch((error) => {

@@ -20,5 +20,9 @@ class PizzaService {
         return put(`http://localhost:9999/feed/pizza/${id}`,pizza)
     }
 
+    deletePizza(id) {
+        return remove(`http://localhost:9999/feed/pizza/${id}`)
+    }
+
 }
 export default PizzaService;

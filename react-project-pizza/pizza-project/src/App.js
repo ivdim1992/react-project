@@ -29,6 +29,8 @@ class App extends Component {
             userLogged: false,
             isAdmin: false,
         }
+
+        this.updatePizza = this.updatedPizza.bind(this)
     }
     async componentDidMount() {
         try {
@@ -70,15 +72,9 @@ class App extends Component {
     }
 
 
-    deletePizza(id) {
-        fetch(`http://localhost:9999/feed/pizza/${Object.values(id)}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ id: id })
-        })
-            .then(response => response.json())
+    async deletePizza({_id}) {
+        
+        await App.service.deletePizza(_id)
             .then(data => {
                 console.log(data)
                 if (data.errors) {
@@ -87,20 +83,24 @@ class App extends Component {
                         toast.error(`${err.msg}`)
                     });
                 } else {
+                    const pizzas = [...this.state.pizzas];
+                    const ourIndex = pizzas.findIndex((pizza) => pizza._id === _id)
+                    pizzas.splice(ourIndex, 1)
                     this.setState({
-                        message: data.message
+                        pizzas
+                    }, () => {
+                        toast(`${data.message}`)
                     })
-                    toast(`${this.state.message}`)
-                    // this.getAllPizzas();
                 }
             })
     }
 
     updatedPizza(pizza) {
-        console.log(this.state.pizzas)
-        console.log(pizza)
+        const pizzas = [...this.state.pizzas];
+        const ourIndex = pizzas.findIndex(({_id}) => _id === pizza._id)
+        pizzas.splice(ourIndex, 1, pizza)
         this.setState({
-            pizzas: [...this.state.pizzas, pizza]
+            pizzas
         })
     }
 
@@ -120,7 +120,6 @@ class App extends Component {
                             {...props}
                             isAdmin={this.state.isAdmin}
                             deletePizza={this.deletePizza.bind(this)}
-                            // updatePizza={this.updatePizza.bind(this)}
                             pizzas={this.state.pizzas}
                         />}
                     />
@@ -155,7 +154,7 @@ class App extends Component {
                         component={(props) =>
                             <UpdatePizza
                                 pizzas={this.state.pizzas}  {...props}
-                                updatedPizza={this.updatedPizza.bind(this)}
+                                updatedPizza={this.updatePizza}
                             />}
                     />
                     <Route
