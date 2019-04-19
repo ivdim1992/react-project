@@ -12,6 +12,7 @@ import Register from './views/register/register';
 import Details from './components/details/details';
 import CreatePizzaForm from './views/createPizzaForm/createPizzaForm';
 import UpdatePizza from './views/updatePizza/updatePizza';
+import Orders from './components/orders/orders';
 import Footer from './components/footer/footer';
 
 import NotFound from './views/not-found/not-found';
@@ -28,9 +29,15 @@ class App extends Component {
             pizzas: [],
             userLogged: false,
             isAdmin: false,
+            addPizzas: []
         }
 
-        this.updatePizza = this.updatedPizza.bind(this)
+        this.updatePizza = this.updatedPizza.bind(this);
+        this.loggedUser = this.loggedUser.bind(this);
+        this.deletePizza = this.deletePizza.bind(this);
+        this.createPizza = this.createPizza.bind(this);
+        this.logout = this.logout.bind(this);
+
     }
     async componentDidMount() {
         try {
@@ -38,12 +45,11 @@ class App extends Component {
 
             this.setState({
                 pizzas: receivedPizzas.pizzas
-            })
+            });
         } catch (err) {
             console.error(err)
         }
     }
-
     loggedUser(user) {
         this.setState({
             userLogged: true,
@@ -51,10 +57,9 @@ class App extends Component {
             isAdmin: user.isAdmin
         })
         window.localStorage.setItem('auth_token', user.token);
-        window.localStorage.setItem('username', user.username)
+        window.localStorage.setItem('username', user.username);
         window.localStorage.setItem('isAdmin', user.isAdmin);
     }
-
     logout() {
         this.setState({
             user: null,
@@ -71,15 +76,11 @@ class App extends Component {
         })
     }
 
-
-    async deletePizza({_id}) {
-        
+    async deletePizza({ _id }) {
         await App.service.deletePizza(_id)
             .then(data => {
-                console.log(data)
                 if (data.errors) {
                     data.errors.forEach(err => {
-                        console.error(err)
                         toast.error(`${err.msg}`)
                     });
                 } else {
@@ -97,30 +98,34 @@ class App extends Component {
 
     updatedPizza(pizza) {
         const pizzas = [...this.state.pizzas];
-        const ourIndex = pizzas.findIndex(({_id}) => _id === pizza._id)
+        const ourIndex = pizzas.findIndex(({ _id }) => _id === pizza._id)
         pizzas.splice(ourIndex, 1, pizza)
         this.setState({
             pizzas
         })
     }
 
+    addedPizzas(pizza) {
+        this.setState({
+            addPizzas: [...this.state.addPizzas, pizza]
+        })
+    }
     render() {
-
+        const { user, isAdmin, userLogged, pizzas } = this.state;
         return (
             <Router>
                 <ToastContainer />
                 <Header
-                    username={this.state.user}
-                    isAdmin={this.state.isAdmin}
-                    logout={this.logout.bind(this)}
+                    username={user}
+                    isAdmin={isAdmin}
+                    logout={this.logout}
                 />
                 <Switch>
                     <Route exact path="/" component={(props) =>
                         <MainPage
                             {...props}
-                            isAdmin={this.state.isAdmin}
-                            deletePizza={this.deletePizza.bind(this)}
-                            pizzas={this.state.pizzas}
+                            deletePizza={this.deletePizza}
+                            pizzas={pizzas}
                         />}
                     />
                     <Route
@@ -132,45 +137,55 @@ class App extends Component {
                         component={(props) =>
                             <Register
                                 {...props}
-                                loggedUser={this.loggedUser.bind(this)} />}
+                                loggedUser={this.loggedUser} />}
                     />
                     <Route
                         path="/login"
                         component={(props) =>
                             < Login
                                 {...props}
-                                userLogged={this.state.userLogged}
-                                loggedUser={this.loggedUser.bind(this)} />}
+                                userLogged={userLogged}
+                                loggedUser={this.loggedUser} />}
                     />
                     <Route
                         path="/pizzas/:id"
                         component={(props) =>
                             <Details
-                                pizzas={this.state.pizzas}
-                                {...props} />}
+                                {...props}
+                                pizzas={pizzas}
+                                addedPizzas={this.addedPizzas.bind(this)}
+                            />}
                     />
                     <Route
                         path="/update/:id"
                         component={(props) =>
                             <UpdatePizza
-                                pizzas={this.state.pizzas}  {...props}
+                                pizzas={pizzas}  {...props}
                                 updatedPizza={this.updatePizza}
                             />}
                     />
                     <Route
                         path="/create"
                         component={(props) =>
-                            this.state.isAdmin
-                                ? <CreatePizzaForm {...props} createPizza={this.createPizza.bind(this)} />
+                            isAdmin
+                                ? <CreatePizzaForm {...props} createPizza={this.createPizza} />
                                 : <Redirect to="/login" />}
                     />
                     <Route
                         path="/logout"
                         component={() =>
-                            this.state.user
+                            user
                                 ? null
                                 : <Redirect to="/" />}
                     />
+                    <Router>
+                        <Route
+                            path="/orders"
+                            component={() => localStorage.getItem('username')
+                                ? <Orders addPizzas={this.state.addPizzas} />
+                                : null}
+                        />
+                    </Router>
                     <Route component={NotFound} />
                 </Switch>
                 <Footer />

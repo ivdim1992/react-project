@@ -1,12 +1,13 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
-function PizzaCard ({ title, imageUrl, price,_id,ingredients,isAdmin,deletePizza }){
+function PizzaCard ({ title, imageUrl, price,_id,ingredients,deletePizza }){
 
   
    function handleClick (){
        deletePizza({_id})
     }
+
     return (
         <div className="pizza-card">
             <div className="pizz-card__title">
@@ -23,7 +24,7 @@ function PizzaCard ({ title, imageUrl, price,_id,ingredients,isAdmin,deletePizza
             </div>
             <div className="pizza-card__price">{price} <span>BGN</span></div>
             {
-                isAdmin 
+                JSON.parse(localStorage.getItem('isAdmin')) 
                 ? <span>
                      <Link to={`/update/${_id}`}><button className="btn update-btn">Update</button></Link>  
                     <button className="btn delete-btn" onClick={handleClick}>Delete</button>

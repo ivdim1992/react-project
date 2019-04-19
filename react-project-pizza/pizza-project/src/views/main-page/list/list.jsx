@@ -1,5 +1,5 @@
 import React, { Fragment, Component } from 'react';
-import PizzaCard from '../pizza-card/pizza-card';
+import PizzaCard from '../card/card';
 
 
 function ListPizzas(props) {
@@ -12,10 +12,10 @@ function ListPizzas(props) {
                     ? props.pizzas.map(pizza => (
                         <li className="item" key={pizza._id}>
                             <PizzaCard 
-                                updatePizza={props.updatePizza} 
                                 deletePizza={props.deletePizza} 
-                                isAdmin={props.isAdmin}  
+                                addedPizzas={props.addedPizzas}
                                 {...pizza} />
+                                
                         </li>
                     ))
                     : <div>No Pizzas in the store</div>

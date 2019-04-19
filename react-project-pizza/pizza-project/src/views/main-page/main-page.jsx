@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom'
 
-import WelcomeMessage from './welcome-message';
-import ListPizzas from './list-pizzas/list-pizzas';
+import WelcomeMessage from './welcome-message/welcome-message';
+import ListPizzas from './list/list';
 
 
 function MainPage (props) {
@@ -12,10 +12,9 @@ function MainPage (props) {
                 <WelcomeMessage message="Welcome to our Delicious pizzas">
                 </WelcomeMessage>
                 <ListPizzas
-                    isAdmin={props.isAdmin}
-                    updatePizza={props.updatePizza}
                     deletePizza={props.deletePizza}
                     pizzas={props.pizzas}
+                   
                 />
             </div>
         )

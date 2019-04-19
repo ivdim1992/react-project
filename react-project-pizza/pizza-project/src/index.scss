@@ -9,14 +9,15 @@
 
 @import './components/header/header';
 //Home
-@import './views/main-page/welcome-message';
-@import './views/main-page/list-pizzas/list-pizza';
-@import './views/main-page/pizza-card/pizza-card';
+@import './views/main-page/welcome-message/welcome-message';
+@import './views/main-page/list/list';
+@import './views/main-page/card/card';
 @import './views//createPizzaForm/createPizzaForm.scss';
 @import './views/updatePizza/updatePizza';
 
 // details
 @import './components/details/details';
+@import './components/orders/orders';
 @import './views/login/login';
 @import './views/register/register';
 @import './components/footer/footer';
