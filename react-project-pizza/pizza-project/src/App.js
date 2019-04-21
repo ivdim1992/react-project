@@ -29,7 +29,7 @@ class App extends Component {
             pizzas: [],
             userLogged: false,
             isAdmin: false,
-            addPizzas: []
+            orderedPizzas: []
         }
 
         this.updatePizza = this.updatedPizza.bind(this);
@@ -105,9 +105,9 @@ class App extends Component {
         })
     }
 
-    addedPizzas(pizza) {
+    orderPizza(pizza) {
         this.setState({
-            addPizzas: [...this.state.addPizzas, pizza]
+            orderedPizzas: [...this.state.orderedPizzas, pizza]
         })
     }
     render() {
@@ -153,7 +153,7 @@ class App extends Component {
                             <Details
                                 {...props}
                                 pizzas={pizzas}
-                                addedPizzas={this.addedPizzas.bind(this)}
+                                orderPizza={this.orderPizza.bind(this)}
                             />}
                     />
                     <Route
@@ -181,8 +181,8 @@ class App extends Component {
                     <Router>
                         <Route
                             path="/orders"
-                            component={() => localStorage.getItem('username')
-                                ? <Orders addPizzas={this.state.addPizzas} />
+                            component={(props) => localStorage.getItem('username')
+                                ? <Orders {...props} orderedPizzas={this.state.orderedPizzas} />
                                 : null}
                         />
                     </Router>

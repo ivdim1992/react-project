@@ -7,7 +7,7 @@ function Quantity(props) {
         const {imageUrl,_id,title} = props.singlePizza;
         const { count, totalPrice } = props;
         const pizza = { imageUrl, count, totalPrice,_id,title };
-        props.addedPizzas(pizza);
+        props.orderPizza(pizza);
         toast('Pizza Successfully added to Orders');
         props.history.push('/');
     }

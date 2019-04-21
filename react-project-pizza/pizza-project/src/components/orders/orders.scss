@@ -1,3 +1,11 @@
+@keyframes sheen {
+    0% {
+      transform: skewY(-45deg) translateX(0);
+    }
+    100% {
+      transform: skewY(-45deg) translateX(12.5em);
+    }
+  }
 .no-orders {
     display: flex;
     align-items: center;
@@ -35,15 +43,40 @@
     }
 
     .proceed {
-        padding: 0.7rem;
-        border: none;
-        border-radius: 0.7rem;
-        color: white;
-        background: #11560A;
-        font-size: 0.9rem;
-
+        padding: 0.45em 0.5em;
+        text-align: center;
+        text-decoration: none;
+        color:#2A672B;
+        border: 2px solid #2A672B;
+        font-size: 18px;
+        display: inline-block;
+        border-radius: 0.3em;
+        transition: all 0.2s ease-in-out;
+        position: relative;
+        overflow: hidden;
+        outline: none;
+   
+        &:before {
+            content: "";
+            background-color: rgba(255,255,255,0.5);
+            height: 100%;
+            width: 3em;
+            display: block;
+            position: absolute;
+            top: 0;
+            left: -4.5em;
+            transform: skewX(-45deg) translateX(0);
+            transition: none;
+        }
         &:hover {
+            background-color: #2A672B;
+            color: #fff;
+            border-bottom: 4px solid darken(#2A672B, 10%);
             cursor: pointer;
+            &:before {
+                transform: skewX(-45deg) translateX(13.5em);
+                transition: all 0.5s ease-in-out;
+            }
         }
     }
 }

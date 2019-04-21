@@ -53,7 +53,7 @@ class Details extends React.Component {
                     totalPrice={this.state.totalPrize}
                     count={this.state.count}
                     decrease={this.decrease}
-                    addedPizzas={this.props.addedPizzas}
+                    orderPizza={this.props.orderPizza}
                 />
             </div >
         )
