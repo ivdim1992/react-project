@@ -11,7 +11,7 @@ const Header = (props) => {
                     {
                         props.username 
                             ? (<span>
-                                <li><NavLink to="/" exact activeClassName="selected">Home</NavLink></li>
+                                <li><NavLink to="/" exact activeClassName="selected">Menu</NavLink></li>
                                 <span>Welcome,<b>{props.username}</b></span>
                                 {
                                     props.isAdmin
@@ -26,7 +26,7 @@ const Header = (props) => {
                             )
                             : (
                                 <span>
-                                    <li><NavLink to="/" exact activeClassName="selected">Home</NavLink></li>
+                                    <li><NavLink to="/" exact activeClassName="selected">Menu</NavLink></li>
                                     <li><NavLink to="/login" activeClassName="selected">Login</NavLink></li>
                                     <li><NavLink to="/register" activeClassName="selected">Register</NavLink></li>
                                 </span>

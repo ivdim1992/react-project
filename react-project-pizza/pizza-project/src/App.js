@@ -3,255 +3,189 @@ import { BrowserRouter as Router, Route, Link, Switch, Redirect } from "react-ro
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
 import Header from './components/header/header';
-import Home from './views/home/home';
+import MainPage from './views/main-page/main-page';
 import About from './views/about/about';
 import Login from './views/login/login';
 import Register from './views/register/register';
 import Details from './components/details/details';
 import CreatePizzaForm from './views/createPizzaForm/createPizzaForm';
 import UpdatePizza from './views/updatePizza/updatePizza';
+import Orders from './components/orders/orders';
 import Footer from './components/footer/footer';
 
 import NotFound from './views/not-found/not-found';
 
+import PizzaService from './services/pizza-service';
 
 class App extends Component {
+    static service = new PizzaService();
     constructor(props) {
         super(props)
 
         this.state = {
-            user: null,
-            userLoged: false,
-            message: '',
+            user: '',
             pizzas: [],
-            isAdmin: false
+            userLogged: false,
+            isAdmin: false,
+            addPizzas: []
         }
+
+        this.updatePizza = this.updatedPizza.bind(this);
+        this.loggedUser = this.loggedUser.bind(this);
+        this.deletePizza = this.deletePizza.bind(this);
+        this.createPizza = this.createPizza.bind(this);
+        this.logout = this.logout.bind(this);
+
     }
-    // LOGIN
-    loginUser(user) {
-        fetch('http://localhost:9999/auth/signin', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        }).then(response => response.json())
-            .then((data) => {
-                if (data.message !== 'User successfully logged in!') {
-                        toast.error(`Username or Password are wrong`);
-                        return <Redirect to='/login'  />
-                } else {
-                    this.setState({
-                        user: data.username,
-                        userLoged: true,
-                        message: data.message,
-                        isAdmin: data.isAdmin
-                    })
-                    toast(`${this.state.message}`)
-                    localStorage.setItem('username', data.username);
-                    localStorage.setItem('token', data.token)
-                }
+    async componentDidMount() {
+        try {
+            const receivedPizzas = await App.service.getAllPizzas();
+
+            this.setState({
+                pizzas: receivedPizzas.pizzas
             });
-    }
-    componentWillMount() {
-        if (localStorage.getItem('username')) {
-            this.setState({
-                user: localStorage.getItem('username'),
-                isAdmin: localStorage.getItem('isAdmin')
-            })
+        } catch (err) {
+            console.error(err)
         }
-        //fetching all pizzas from database
-       this.getAllPizzas();
     }
-
-    getAllPizzas() {
-       return fetch('http://localhost:9999/feed/pizzas')
-        .then(response => response.json())
-        .then(data => {
-            this.setState({
-                pizzas: data.pizzas
-            })
+    loggedUser(user) {
+        this.setState({
+            userLogged: true,
+            user: user.username,
+            isAdmin: user.isAdmin
         })
+        window.localStorage.setItem('auth_token', user.token);
+        window.localStorage.setItem('username', user.username);
+        window.localStorage.setItem('isAdmin', user.isAdmin);
     }
-
     logout() {
         this.setState({
             user: null,
             isAdmin: false,
-            userLoged: false,
+            userLogged: false,
         })
         localStorage.clear();
         toast('User successfully logged out')
     }
 
-    // REGISTER USER
-    registerUser(user) {
-        fetch('http://localhost:9999/auth/signup', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        }).then(response => response.json())
-            .then(body => {
-                if (body.errors) {
-                    body.errors.forEach(err => {
-                        toast.error(`${err.msg}`)
-                    });
-                } else {
-                    this.setState({
-                        user: body.username,
-                        message: body.message,
-                        userLoged: true,
-                    })
-
-                    toast(`${this.state.message}`)
-
-                    this.loginUser({ username: user.username, password: user.password })
-                }
-            });
-    };
-
     createPizza(pizza) {
-
-        fetch('http://localhost:9999/feed/pizza/create', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(pizza)
+        this.setState({
+            pizzas: [...this.state.pizzas, pizza.pizza]
         })
-            .then(response => response.json())
+    }
+
+    async deletePizza({ _id }) {
+        await App.service.deletePizza(_id)
             .then(data => {
                 if (data.errors) {
                     data.errors.forEach(err => {
                         toast.error(`${err.msg}`)
                     });
                 } else {
-                    toast('Succesfully Created')
-                    this.getAllPizzas();
+                    const pizzas = [...this.state.pizzas];
+                    const ourIndex = pizzas.findIndex((pizza) => pizza._id === _id)
+                    pizzas.splice(ourIndex, 1)
+                    this.setState({
+                        pizzas
+                    }, () => {
+                        toast(`${data.message}`)
+                    })
                 }
             })
     }
 
-    deletePizza(id){
-        fetch(`http://localhost:9999/feed/pizza/${Object.values(id)}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({id: id})
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data)
-            if (data.errors) {
-                data.errors.forEach(err => {
-                    console.error(err)
-                    toast.error(`${err.msg}`)
-                });
-            } else {
-                this.setState({
-                    message: data.message
-                })
-                toast(`${this.state.message}`)
-                this.getAllPizzas();
-            }
+    updatedPizza(pizza) {
+        const pizzas = [...this.state.pizzas];
+        const ourIndex = pizzas.findIndex(({ _id }) => _id === pizza._id)
+        pizzas.splice(ourIndex, 1, pizza)
+        this.setState({
+            pizzas
         })
     }
 
-    updatePizza(pizza,id) {
-        fetch(`http://localhost:9999/feed/pizza/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(pizza)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.errors) {
-                data.errors.forEach(err => {
-                    console.error(err)
-                    toast.error(`${err.msg}`)
-                });
-            }else {
-                this.setState({
-                    message: data.message
-                })
-                toast(`${this.state.message}`)
-                this.getAllPizzas();
-            }
+    addedPizzas(pizza) {
+        this.setState({
+            addPizzas: [...this.state.addPizzas, pizza]
         })
     }
-
     render() {
+        const { user, isAdmin, userLogged, pizzas } = this.state;
         return (
             <Router>
                 <ToastContainer />
-                <Header 
-                    username={this.state.user}
-                    isAdmin={this.state.isAdmin} 
-                    logout={this.logout.bind(this)} 
+                <Header
+                    username={user}
+                    isAdmin={isAdmin}
+                    logout={this.logout}
                 />
                 <Switch>
-                    <Route exact path="/" component={(props) => 
-                        <Home 
+                    <Route exact path="/" component={(props) =>
+                        <MainPage
                             {...props}
-                            isAdmin={this.state.isAdmin} 
-                            pizzas={this.state.pizzas}
-                            deletePizza={this.deletePizza.bind(this)} 
-                            updatePizza={this.updatePizza.bind(this)}
-                        />} 
-                     />
-                    <Route 
-                        path="/about" 
-                        component={About} 
+                            deletePizza={this.deletePizza}
+                            pizzas={pizzas}
+                        />}
+                    />
+                    <Route
+                        path="/about"
+                        component={About}
                     />
                     <Route
                         path="/register"
                         component={(props) =>
-                            this.state.userLoged === false
-                                ? <Register {...props} registerUser={this.registerUser.bind(this)} />
-                                : <Redirect to="/" />
-                        } 
+                            <Register
+                                {...props}
+                                loggedUser={this.loggedUser} />}
                     />
                     <Route
                         path="/login"
                         component={(props) =>
-                            this.state.userLoged === false
-                                ? <Login {...props} loginUser={this.loginUser.bind(this)} />
-                                : <Redirect to="/" />}   
-                    />
-                    <Route 
-                    path="/pizzas/:id" 
-                    component={(props) =>    
-                        <Details  
-                            pizza={this.state.pizzas}  
-                            {...props} />}
-                    />
-                    <Route 
-                        path="/update/:id" 
-                        component={(props) => 
-                        <UpdatePizza 
-                            pizzas={this.state.pizzas}  {...props} 
-                            updatePizza={this.updatePizza.bind(this)}/>} 
-                    />
-                    <Route 
-                        path="/create" 
-                        component={(props) =>
-                        this.state.isAdmin
-                            ? <CreatePizzaForm {...props} createPizza={this.createPizza.bind(this)} />
-                            : <Redirect to="/login" /> } 
+                            < Login
+                                {...props}
+                                userLogged={userLogged}
+                                loggedUser={this.loggedUser} />}
                     />
                     <Route
-                        path="/logout" 
-                        component={() =>
-                        this.state.user
-                            ? null
-                            : <Redirect to="/" />} 
+                        path="/pizzas/:id"
+                        component={(props) =>
+                            <Details
+                                {...props}
+                                pizzas={pizzas}
+                                addedPizzas={this.addedPizzas.bind(this)}
+                            />}
                     />
+                    <Route
+                        path="/update/:id"
+                        component={(props) =>
+                            <UpdatePizza
+                                pizzas={pizzas}  {...props}
+                                updatedPizza={this.updatePizza}
+                            />}
+                    />
+                    <Route
+                        path="/create"
+                        component={(props) =>
+                            isAdmin
+                                ? <CreatePizzaForm {...props} createPizza={this.createPizza} />
+                                : <Redirect to="/login" />}
+                    />
+                    <Route
+                        path="/logout"
+                        component={() =>
+                            user
+                                ? null
+                                : <Redirect to="/" />}
+                    />
+                    <Router>
+                        <Route
+                            path="/orders"
+                            component={() => localStorage.getItem('username')
+                                ? <Orders addPizzas={this.state.addPizzas} />
+                                : null}
+                        />
+                    </Router>
                     <Route component={NotFound} />
                 </Switch>
                 <Footer />

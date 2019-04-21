@@ -1,0 +1,62 @@
+.details-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+  text-align: center;
+
+  
+  .pizza-details {
+    &__price {
+      margin: 0.6rem 0;
+    }
+
+    &__img {
+        display: block;
+    }
+    &__ingredients {
+      
+    }
+  }
+
+  .quantity {
+    margin: 0.3rem 0 1rem 6rem;
+
+    
+    .btn {
+      margin: 0 1rem;
+      padding: 0.4rem 0.7rem;
+      font-size: 1.8rem;
+      border-radius: 2rem;
+      border: none;
+      background: white;
+      outline: none;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    .btn-decrease {
+      padding: 0.4rem 0.9rem;
+    }
+  }
+  .btn-order {
+    padding: 0.6rem 2rem;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    border-radius: 4px;
+    outline: none;
+    margin: 1rem;
+    background: #8c7c8c;
+    
+    &:hover {
+        cursor: pointer;
+    }
+  }
+  .totalPrice {
+    margin-left: 2rem;
+}
+}
